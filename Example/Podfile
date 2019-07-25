@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'StorageKit_Example' do
+  pod 'StorageKit', :path => '../'
+
+  target 'StorageKit_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
