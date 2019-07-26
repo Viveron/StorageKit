@@ -1,0 +1,6 @@
+framework module Pods_StorageKit_Example {
+  umbrella header "Pods-StorageKit_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

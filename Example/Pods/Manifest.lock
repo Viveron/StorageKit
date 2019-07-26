@@ -1,0 +1,16 @@
+PODS:
+  - StorageKit (0.1.0)
+
+DEPENDENCIES:
+  - StorageKit (from `../`)
+
+EXTERNAL SOURCES:
+  StorageKit:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  StorageKit: 36865470bf9e0bf9454dc954dc215764d79d158d
+
+PODFILE CHECKSUM: d42e98b630c9e3519f3968b885c3779903194da1
+
+COCOAPODS: 1.6.1
