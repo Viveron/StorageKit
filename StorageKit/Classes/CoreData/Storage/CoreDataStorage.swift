@@ -11,9 +11,7 @@ import CoreData
 
 open class CoreDataStorage {
     
-    private let container: NSPersistentContainer
-    
-    // MARK: - Interface
+    public let container: NSPersistentContainer
     
     public var mainManagedObjectContext: NSManagedObjectContext {
         return container.viewContext
@@ -48,12 +46,9 @@ open class CoreDataStorage {
         
         mainManagedObjectContext.performAsync { context in
             names.forEach { name in
-                let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: name)
-                if let result = try? context.fetch(fetchRequest) {
-                    result.forEach { managedObject in
-                        context.delete(managedObject)
-                    }
-                }
+                let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: name)
+                let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+                _ = try? context.execute(batchDeleteRequest)
             }
             
             var savingError: Error?

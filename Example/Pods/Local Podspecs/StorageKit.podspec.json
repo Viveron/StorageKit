@@ -1,9 +1,9 @@
 {
   "name": "StorageKit",
-  "version": "0.1.0",
-  "summary": "A short description of StorageKit.",
-  "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/Victor Shabanov/StorageKit",
+  "version": "1.0.0",
+  "summary": "CoreData heplfull extenions",
+  "description": "Helpful extensions and base classes of CoreData for best practice.",
+  "homepage": "https://github.com/viveron/StorageKit",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,12 +12,14 @@
     "Victor Shabanov": "shabanov.dev.git@gmail.com"
   },
   "source": {
-    "git": "https://github.com/Victor Shabanov/StorageKit.git",
-    "tag": "0.1.0"
+    "git": "https://github.com/viveron/StorageKit.git",
+    "tag": "1.0.0"
   },
   "platforms": {
     "ios": "10.0"
   },
+  "swift_versions": "5.0",
   "source_files": "StorageKit/Classes/**/*",
-  "frameworks": "CoreData"
+  "frameworks": "CoreData",
+  "swift_version": "5.0"
 }

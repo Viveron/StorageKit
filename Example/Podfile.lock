@@ -1,5 +1,5 @@
 PODS:
-  - StorageKit (0.1.0)
+  - StorageKit (1.0.0)
 
 DEPENDENCIES:
   - StorageKit (from `../`)
@@ -9,8 +9,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  StorageKit: 36865470bf9e0bf9454dc954dc215764d79d158d
+  StorageKit: b51e84b70a358da48a7361dd3d4dda20d31a2d1e
 
 PODFILE CHECKSUM: d42e98b630c9e3519f3968b885c3779903194da1
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.8.4

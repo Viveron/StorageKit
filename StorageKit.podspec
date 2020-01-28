@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'StorageKit'
-  s.version          = '0.1.0'
+  s.version          = '1.0.0'
   s.summary          = 'CoreData heplfull extenions'
 
   s.description      = <<-DESC
@@ -14,7 +14,7 @@ Helpful extensions and base classes of CoreData for best practice.
 
   s.ios.deployment_target = '10.0'
   
-  s.swift_version = '4.2'
+  s.swift_version = '5.0'
   s.source_files = 'StorageKit/Classes/**/*'
   s.frameworks = 'CoreData'
 end

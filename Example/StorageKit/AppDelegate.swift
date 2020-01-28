@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         storageExample()
         
@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 note.text = text
             }
             
-            let predicate = NSPredicate(format: "ANY text CONTAINS[c] %@", "3")
+            let predicate = NSPredicate(format: "text CONTAINS[c] %@", "3")
             if let isExist = try? NoteManagedObject.exist(in: storage.mainManagedObjectContext, predicate), isExist {
                 storage.clear {
                     if $0 == nil {
@@ -47,7 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                 }
             } else {
-                storage.mainManagedObjectContext.asyncSaveToStore {
+                storage.mainManagedObjectContext.saveToStoreAsync {
                     if $0 == nil {
                         print("Save is done...")
                     }

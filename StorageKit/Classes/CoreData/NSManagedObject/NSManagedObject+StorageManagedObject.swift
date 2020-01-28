@@ -46,7 +46,7 @@ public extension StorageManagedObject where Self: NSManagedObject {
         }
     }
     
-    // MARK: - Operations
+    // MARK: - Sync operations
     
     static func exist(in context: NSManagedObjectContext,
                       _ predicate: NSPredicate? = nil) throws -> Bool {
@@ -114,5 +114,39 @@ public extension StorageManagedObject where Self: NSManagedObject {
         
         created = true
         return create(in: context)
+    }
+    
+    // MARK: - Async operations
+    
+    static func fetchAsync(in context: NSManagedObjectContext,
+                           _ predicate: NSPredicate? = nil,
+                           _ sortDescriptors: [NSSortDescriptor]? = nil,
+                           _ closure: @escaping (_ result: [ManagedObject]?, _ error: Error?) -> Void) {
+        fetchAsync(in: context, fetchRequest(predicate, sortDescriptors), closure)
+    }
+    
+    static func fetchAsync(in context: NSManagedObjectContext,
+                           _ fetchRequest: FetchRequest,
+                           _ closure: @escaping (_ result: [ManagedObject]?, _ error: Error?) -> Void) {
+        context.performAsync(fetchRequest) { [closure] result, error in
+            closure(result, error)
+        }
+    }
+    
+    static func fetchOrCreateAsync(in context: NSManagedObjectContext,
+                                   _ predicate: NSPredicate? = nil,
+                                   _ closure: @escaping (_ result: ManagedObject, _ created: Bool, _ error: Error?) -> Void) {
+        let request = fetchRequest { (request) in
+            request.predicate = predicate
+            request.fetchLimit = 1
+        }
+        
+        fetchAsync(in: context, request) { [closure] result, error in
+            if let managedObject = result?.first {
+                closure(managedObject, false, error)
+            } else {
+                closure(create(in: context), true, error)
+            }
+        }
     }
 }

@@ -11,6 +11,8 @@ import CoreData
 
 public extension NSManagedObjectContext {
     
+    // MARK: - Async operations
+    
     func performAsync(_ closure: @escaping (_ privateContext: NSManagedObjectContext) -> Void) {
         let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         
@@ -25,7 +27,7 @@ public extension NSManagedObjectContext {
                       _ closure: @escaping (_ result: [Any]?, _ error: Error?) -> Void) {
         let resultType = fetchRequest.resultType
         
-        performAsync { (privateContext) in
+        performAsync { privateContext in
             var result: [Any]? = nil
             var error: Error? = nil
             
@@ -37,9 +39,8 @@ public extension NSManagedObjectContext {
                         var managedObjects: [NSManagedObject] = []
                         
                         if let objectIds = (resultObjects as NSArray).value(forKey: "objectID") as? [NSManagedObjectID] {
-                            for objectId in objectIds {
-                                let managedObject = self.object(with: objectId)
-                                managedObjects.append(managedObject)
+                            managedObjects = objectIds.map {
+                                self.object(with: $0)
                             }
                         }
                         
@@ -61,13 +62,57 @@ public extension NSManagedObjectContext {
         }
     }
     
-    func asyncSaveToStore(_ completion: @escaping (_ error: Error?) -> Void) {
+    func performAsync<T: NSManagedObject>(_ fetchRequest: NSFetchRequest<T>,
+                                          _ closure: @escaping (_ result: [T]?, _ error: Error?) -> Void) {
+        guard fetchRequest.resultType == .managedObjectResultType else {
+            closure(nil, nil)
+            return
+        }
+        
+        performAsync { privateContext in
+            var result: [T]? = nil
+            var error: Error? = nil
+            
+            do {
+                result = try privateContext.fetch(fetchRequest)
+                
+                self.perform {
+                    if let resultObjects = result, resultObjects.count > 0 {
+                        var managedObjects: [T] = []
+                        
+                        if let objectIds = (resultObjects as NSArray).value(forKey: "objectID") as? [NSManagedObjectID] {
+                            managedObjects = objectIds.compactMap {
+                                self.object(with: $0) as? T
+                            }
+                        }
+                        
+                        closure(managedObjects, error)
+                    }
+                    else {
+                        closure(result, error)
+                    }
+                }
+                return
+            }
+            catch let fetchError {
+                error = fetchError
+            }
+            
+            self.perform {
+                closure(result, error)
+            }
+        }
+    }
+    
+    // MARK: - Save operations
+    
+    func saveToStoreAsync(_ completion: @escaping (_ error: Error?) -> Void) {
         guard hasChanges else {
             completion(nil)
             return
         }
         
-        performAsync { (context) in
+        performAsync { context in
             var savingError: Error?
             
             do {
