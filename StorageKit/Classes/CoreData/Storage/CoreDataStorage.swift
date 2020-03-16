@@ -17,21 +17,23 @@ open class CoreDataStorage {
         return container.viewContext
     }
     
-    public init?(model: String, bundle: Bundle = .main, blank: Bool = false, protection: FileProtectionType = .none) {
-        guard let url = bundle.url(forResource: model, withExtension: "momd") else {
+    public convenience init?(name: String, bundle: Bundle = .main, blank: Bool = false, protection: FileProtectionType = .none) {
+        guard let model = NSManagedObjectModel(name: name, bundle: bundle) else {
             return nil
         }
-        guard let managedObjectModel = NSManagedObjectModel(contentsOf: url) else {
+
+        self.init(name: name, managedObjectModel: model, blank: blank, protection: protection)
+    }
+
+    public init?(name: String, managedObjectModel: NSManagedObjectModel, blank: Bool = false, protection: FileProtectionType = .none) {
+        guard let description = NSPersistentStoreDescription.createSQLiteStore(name: name, blank: blank) else {
             return nil
         }
-        guard let description = NSPersistentStoreDescription.createSQLiteStore(model: model, blank: blank) else {
-            return nil
-        }
-        
+
         description.shouldAddStoreAsynchronously = true
         description.setOption(protection as NSObject, forKey: NSPersistentStoreFileProtectionKey)
-        
-        self.container = NSPersistentContainer(name: model, managedObjectModel: managedObjectModel)
+
+        self.container = NSPersistentContainer(name: name, managedObjectModel: managedObjectModel)
         self.container.persistentStoreDescriptions = [description]
     }
     

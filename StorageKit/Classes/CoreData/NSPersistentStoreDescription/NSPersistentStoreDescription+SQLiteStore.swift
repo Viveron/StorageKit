@@ -11,9 +11,9 @@ import CoreData
 
 public extension NSPersistentStoreDescription {
     
-    static func createSQLiteStore(model: String, blank: Bool = false) -> NSPersistentStoreDescription? {
+    static func createSQLiteStore(name: String, blank: Bool = false) -> NSPersistentStoreDescription? {
         let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last
-        guard let storeURL = documentDirectory?.appendingPathComponent("\(model).sqlite") else {
+        guard let storeURL = documentDirectory?.appendingPathComponent("\(name).sqlite") else {
             return nil
         }
         

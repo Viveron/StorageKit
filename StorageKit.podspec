@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'StorageKit'
-  s.version          = '1.0.0'
+  s.version          = '1.1.0'
   s.summary          = 'CoreData heplfull extenions'
 
   s.description      = <<-DESC

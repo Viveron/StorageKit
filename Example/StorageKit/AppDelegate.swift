@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func storageExample() {
-        guard let storage = CoreDataStorage(model: "StorageModel", protection: .completeUnlessOpen) else {
+        guard let storage = CoreDataStorage(name: "StorageModel", protection: .completeUnlessOpen) else {
             return
         }
         
