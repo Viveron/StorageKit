@@ -25,11 +25,15 @@ open class CoreDataStorage {
         self.init(name: name, managedObjectModel: model, blank: blank, protection: protection)
     }
 
-    public init?(name: String, managedObjectModel: NSManagedObjectModel, blank: Bool = false, protection: FileProtectionType = .none) {
+    public init?(name: String, managedObjectModel: NSManagedObjectModel, autoMigrate: Bool = false, blank: Bool = false, protection: FileProtectionType = .none) {
         guard let description = NSPersistentStoreDescription.createSQLiteStore(name: name, blank: blank) else {
             return nil
         }
 
+        if autoMigrate {
+            description.shouldMigrateStoreAutomatically = true
+            description.shouldInferMappingModelAutomatically = true
+        }
         description.shouldAddStoreAsynchronously = true
         description.setOption(protection as NSObject, forKey: NSPersistentStoreFileProtectionKey)
 
